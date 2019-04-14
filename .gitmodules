@@ -1,0 +1,3 @@
+[submodule "instagram_react"]
+	path = instagram_react
+	url = https://github.com/luciferankon/instagram_react
