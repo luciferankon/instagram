@@ -28,5 +28,16 @@ app.get("/profile/name", (req, res) => {
   });
 });
 
+app.get("/profile/follower", (req, res) => {
+  const query =
+    "select count(follower_id ) as followers from follow where followee_id =1";
+  connection.query(query, (error, results, fields) => {
+    res.send(
+      JSON.stringify({
+        follower: results[0].followers
+      })
+    );
+  });
+});
 
 app.listen(process.env.PORT || 8000);
