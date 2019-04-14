@@ -40,4 +40,16 @@ app.get("/profile/follower", (req, res) => {
   });
 });
 
+app.get("/profile/followee", (req, res) => {
+  const query =
+    "select count(followee_id ) as followees from follow where follower_id =1";
+  connection.query(query, (error, results, fields) => {
+    res.send(
+      JSON.stringify({
+        followee: results[0].followees
+      })
+    );
+  });
+});
+
 app.listen(process.env.PORT || 8000);
