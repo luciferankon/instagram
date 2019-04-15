@@ -17,50 +17,26 @@ app.use(express.static("instagram_react/build"));
 app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/profile/name", (req, res) => {
-  const query = "select username from users limit 1";
+const makeQuery = function(res,query) {
   connection.query(query, (error, results, fields) => {
-    res.send(
-      JSON.stringify({
-        userName: results[0].username
-      })
-    );
+    res.send(JSON.stringify(results[0]));
   });
+};
+
+app.get("/profile/name", (req, res) => {
+  makeQuery(res,"select username as userName from users limit 1");
 });
 
 app.get("/profile/follower", (req, res) => {
-  const query =
-    "select count(follower_id ) as followers from follow where followee_id =1";
-  connection.query(query, (error, results, fields) => {
-    res.send(
-      JSON.stringify({
-        follower: results[0].followers
-      })
-    );
-  });
+  makeQuery(res,"select count(follower_id ) as follower from follow where followee_id =1");
 });
 
 app.get("/profile/followee", (req, res) => {
-  const query =
-    "select count(followee_id ) as followees from follow where follower_id =1";
-  connection.query(query, (error, results, fields) => {
-    res.send(
-      JSON.stringify({
-        followee: results[0].followees
-      })
-    );
-  });
+  makeQuery(res,"select count(followee_id ) as followee from follow where follower_id =1");
 });
 
 app.get("/profile/post", (req, res) => {
-  const query = "select count(photo_url) as post from photos where user_id=1";
-  connection.query(query, (error, results, fields) => {
-    res.send(
-      JSON.stringify({
-        post: results[0].post
-      })
-    );
-  });
+  makeQuery(res,"select count(photo_url) as post from photos where user_id=1");
 });
 
 app.listen(process.env.PORT || 8000);
