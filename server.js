@@ -17,26 +17,42 @@ app.use(express.static("instagram_react/build"));
 app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const makeQuery = function(res,query) {
+const makeQuery = function(res, query) {
   connection.query(query, (error, results, fields) => {
     res.send(JSON.stringify(results[0]));
   });
 };
 
 app.get("/profile/name", (req, res) => {
-  makeQuery(res,"select username as userName from users limit 1");
+  makeQuery(res, "select username as userName from users limit 1");
 });
 
 app.get("/profile/follower", (req, res) => {
-  makeQuery(res,"select count(follower_id ) as follower from follow where followee_id =1");
+  makeQuery(
+    res,
+    "select count(follower_id ) as follower from follow where followee_id =1"
+  );
 });
 
 app.get("/profile/followee", (req, res) => {
-  makeQuery(res,"select count(followee_id ) as followee from follow where follower_id =1");
+  makeQuery(
+    res,
+    "select count(followee_id ) as followee from follow where follower_id =1"
+  );
 });
 
 app.get("/profile/post", (req, res) => {
-  makeQuery(res,"select count(photo_url) as post from photos where user_id=1");
+  makeQuery(res, "select count(photo_url) as post from photos where user_id=1");
+});
+
+app.get("/profile/posts", (req, res) => {
+  connection.query(
+    "select photo_url from photos where user_id=1;",
+    (err, results, fields) => {
+      const posts = results.map(result => result.photo_url);
+      res.send(JSON.stringify({ posts }));
+    }
+  );
 });
 
 app.listen(process.env.PORT || 8000);
