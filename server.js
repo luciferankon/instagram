@@ -52,4 +52,15 @@ app.get("/profile/followee", (req, res) => {
   });
 });
 
+app.get("/profile/post", (req, res) => {
+  const query = "select count(photo_url) as post from photos where user_id=1";
+  connection.query(query, (error, results, fields) => {
+    res.send(
+      JSON.stringify({
+        post: results[0].post
+      })
+    );
+  });
+});
+
 app.listen(process.env.PORT || 8000);
