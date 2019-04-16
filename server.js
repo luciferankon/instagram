@@ -4,10 +4,10 @@ const mysql = require("mysql");
 const view = require("ejs");
 
 const connection = mysql.createConnection({
-  host: "us-cdbr-iron-east-02.cleardb.net",
-  user: "b86b53caf069d5",
-  password: "1077624f",
-  database: "heroku_9b06396d28cc444"
+  host: process.env.DB_ROOT,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE
 });
 
 connection.connect();
@@ -27,6 +27,7 @@ app.use((req, res) => {
   console.log(req.url);
   req.next();
 });
+
 app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({ extended: true }));
 
