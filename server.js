@@ -10,13 +10,13 @@ const connection = mysql.createConnection({
   database: process.env.DB_DATABASE
 });
 
-connection.connect((err)=>console.log(err));
-
 const app = express();
 
 app.set("views", __dirname + "/instagram_react/build");
 app.engine("html", view.renderFile);
 app.set("view engine", "html");
+
+app.use((req, res) => connection.connect());
 
 app.use(express.static("instagram_react/build"));
 app.get(/\/user/, (req, res) => {
