@@ -10,7 +10,7 @@ const connection = mysql.createConnection({
   database: process.env.DB_DATABASE
 });
 
-connection.connect();
+connection.connect((err)=>console.log(err));
 
 const app = express();
 
