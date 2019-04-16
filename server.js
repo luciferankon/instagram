@@ -16,16 +16,19 @@ app.set("views", __dirname + "/instagram_react/build");
 app.engine("html", view.renderFile);
 app.set("view engine", "html");
 
-app.use((req, res) => connection.connect());
+app.use((req, res, next) => {
+  connection.connect()
+  next();
+});
 
 app.use(express.static("instagram_react/build"));
 app.get(/\/user/, (req, res) => {
   res.render("index.html");
 });
 
-app.use((req, res) => {
+app.use((req, res, next) => {
   console.log(req.url);
-  req.next();
+  next();
 });
 
 app.use(bodyParser.text());
